@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brain Pod AI – Ultimate 3D Gamified 2026</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;font-family:'Arial',sans-serif;}
+body {background:#0d0d0d;color:#fff;overflow-x:hidden;perspective:1200px;}
+button {cursor:pointer;transition:all 0.3s;}
+button:hover{transform:scale(1.05);}
+canvas {position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+
+/* MICRO FUNNEL */
+#micro-funnel {display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center;padding:2rem;z-index:10;position:relative;background:#0a0a0a;}
+#micro-funnel h1 {font-size:2rem;color:#00ffcc;margin-bottom:1rem;}
+#micro-funnel p {color:#ccc;margin-bottom:2rem;}
+#micro-funnel button {padding:1rem 2rem;font-size:1.1rem;border:none;border-radius:12px;font-weight:bold;margin:0.5rem;}
+
+/* LANDING PAGE */
+#landing-page {display:none;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;text-align:center;padding:2rem;position:relative;z-index:10;}
+.hero {position:relative;overflow:hidden;width:100%;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.hero video {position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:0.45;}
+.hero .overlay {position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(rgba(0,255,204,0.2), rgba(255,0,102,0.2));z-index:-1;pointer-events:none;}
+.hero h1 {font-size:3rem;color:#00ffcc;line-height:1.2;text-shadow:0 0 10px #00ffcc;opacity:0;animation:fadeIn 1s ease forwards;}
+.hero p {font-size:1.2rem;color:#fff;margin:1rem 0;text-shadow:0 0 5px #fff;opacity:0;animation:fadeIn 1.2s ease forwards;}
+.cta {padding:1rem 2rem;font-weight:bold;font-size:1.2rem;border:none;border-radius:12px;color:#fff;background:#ff0066;text-shadow:0 0 10px #ff0066;position:relative;animation:pulse 2s infinite;}
+.micro-urgency {margin-top:0.5rem;color:#ffcc00;font-size:0.9rem;}
+.countdown {font-size:1.5rem;color:#ff3300;margin-top:1rem;}
+
+/* AI PREVIEW */
+.ai-preview {margin-top:3rem;padding:1rem;background:#111;border-radius:12px;max-width:600px;text-align:left;opacity:0;animation:fadeIn 2s ease forwards;transform-style: preserve-3d;transition: transform 0.3s, opacity 0.5s;text-shadow:0 0 5px #00ffcc;}
+.ai-preview h3 {color:#00ffcc;margin-bottom:0.5rem;}
+.ai-preview pre {background:#222;padding:1rem;border-radius:8px;overflow-x:auto;transition: opacity 0.5s, transform 0.3s;white-space:pre-wrap;word-wrap:break-word;}
+
+/* TESTIMONIALS */
+.testimonials {display:flex;flex-direction:column;align-items:center;margin:3rem 0;}
+.testimonial {background:#111;padding:1.5rem;margin:1rem;border-radius:12px;max-width:500px;position:relative;transition:transform 0.3s;transform-style: preserve-3d;text-shadow:0 0 5px #fff;}
+.testimonial:hover {transform:translateY(-5px) rotateX(3deg) rotateY(3deg);}
+.stars {color:#ffcc00;margin-bottom:0.5rem;}
+
+/* EXIT POPUP */
+.exit-popup {position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:#222;padding:2rem;border-radius:16px;text-align:center;z-index:9999;transition:transform 0.3s;box-shadow:0 0 20px #ff0066;}
+.exit-popup.show {transform:translate(-50%,-50%) scale(1);}
+.exit-popup h2 {color:#ff0066;margin-bottom:1rem;text-shadow:0 0 10px #ff0066;}
+.exit-popup button {padding:0.8rem 2rem;background:#00ffcc;color:#000;font-weight:bold;border:none;border-radius:12px;text-shadow:0 0 5px #00ffcc;}
+
+/* LIVE USERS & PROGRESS */
+.live-bubble {position:fixed;bottom:2rem;right:2rem;background:#ff0066;padding:0.8rem 1.2rem;border-radius:50px;font-weight:bold;animation:fadeIn 1s ease forwards;text-shadow:0 0 5px #ff0066;}
+.progress-bar {width:300px;height:15px;background:#333;border-radius:8px;margin-top:1rem;overflow:hidden;}
+.progress-fill {height:100%;width:0%;background:#00ffcc;transition:width 0.5s ease;box-shadow:0 0 10px #00ffcc;}
+
+/* BADGES */
+.badge {position:fixed;top:20%;left:50%;transform:translateX(-50%) scale(0);background:#00ffcc;color:#000;padding:1rem 2rem;border-radius:12px;font-weight:bold;z-index:9999;transition:transform 0.3s;box-shadow:0 0 15px #00ffcc;}
+.badge.show {transform:translateX(-50%) scale(1);}
+.badge span {font-size:1.2rem;}
+
+/* ANIMATIONS */
+@keyframes fadeIn {from {opacity:0;transform:translateY(10px);} to {opacity:1;transform:translateY(0);}}
+@keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+</style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<!-- MICRO FUNNEL -->
+<div id="micro-funnel">
+<h1>Is Brain Pod AI Right for You?</h1>
+<p>Answer a quick question to unlock your personalized AI growth path.</p>
+<button onclick="goToLanding(true)">Yes, I’m Ready!</button>
+<button onclick="goToLanding(false)">Not Sure Yet</button>
+</div>
+
+<!-- LANDING PAGE -->
+<div id="landing-page">
+<section class="hero">
+<video autoplay loop muted playsinline>
+<source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4">
+</video>
+<div class="overlay"></div>
+<h1 id="headline">3x Productivity in 7 Days with Brain Pod AI – Unlock Your Quantum Growth</h1>
+<p id="subheadline">Experience instant AI-driven results in writing, design & marketing.</p>
+<button class="cta" id="cta-btn">Get Instant Access</button>
+<div class="micro-urgency" id="micro-urgency">Limited Spots – Only <span id="spots">5</span> Left Today</div>
+<div class="countdown" id="countdown"></div>
+<div class="ai-preview" id="ai-preview">
+<h3>Live AI Preview:</h3>
+<pre id="ai-sample">Generating your first Brain Pod AI result...</pre>
+</div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+<div class="testimonial">
+<div class="stars">★★★★★</div>
+Brain Pod AI skyrocketed my productivity in just days!
+</div>
+<div class="testimonial">
+<div class="stars">★★★★★</div>
+The AI previews convinced me instantly – best tool ever.
+</div>
+</section>
+
+<!-- EXIT POPUP -->
+<div class="exit-popup" id="exit-popup">
+<h2 id="exit-title">Wait! Don’t Miss Out!</h2>
+<p id="exit-msg">Claim your spot before it’s gone. Only <span id="popup-spots">3</span> left!</p>
+<button id="popup-cta">Get Instant Access</button>
+</div>
+
+<!-- LIVE USERS -->
+<div class="live-bubble" id="live-bubble">Live Users: <span id="live-count">12</span></div>
+
+<!-- PROGRESS BAR -->
+<div class="progress-bar">
+<div class="progress-fill" id="progress-fill"></div>
+</div>
+
+<!-- BADGES -->
+<div class="badge" id="badge">🎉 <span>Reward Unlocked!</span></div>
+
+<script>
+// PARTICLE SYSTEM
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+window.addEventListener('resize', ()=>{ width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; });
+const particles = [];
+const particleCount = 60;
+class Particle{constructor(){this.x=Math.random()*width;this.y=Math.random()*height;this.size=Math.random()*4+2;this.speedX=(Math.random()-0.5)*2;this.speedY=(Math.random()-0.5)*2;this.color=`hsl(${Math.random()*360},100%,70%)`;}
+update(){this.x+=this.speedX;this.y+=this.speedY;if(this.x<0||this.x>width)this.speedX*=-1;if(this.y<0||this.y>height)this.speedY*=-1;}
+draw(){ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();}}
+for(let i=0;i<particleCount;i++){particles.push(new Particle());}
+function animateParticles(){ctx.clearRect(0,0,width,height);particles.forEach(p=>{p.update(); p.draw();});requestAnimationFrame(animateParticles);}
+animateParticles();
+
+// DOMContentLoaded
+document.addEventListener('DOMContentLoaded',()=>{
+let points=0;
+const badge=document.getElementById('badge');
+
+// MICRO FUNNEL
+window.goToLanding=function(isReady){
+document.getElementById('micro-funnel').style.display='none';
+document.getElementById('landing-page').style.display='flex';
+if(!isReady) alert("No worries! Explore Brain Pod AI and see how it can boost your productivity.");
+personalizeContent();
+startSplitTest();
+generateDynamicAIContentAdvanced();
+}
+
+// COUNTDOWN
+let countdownTime=Math.floor(Math.random()*15+15)*60;
+const countdownEl=document.getElementById('countdown');
+function updateCountdown(){let min=Math.floor(countdownTime/60),sec=countdownTime%60;countdownEl.textContent=`Offer expires in ${min}:${sec<10?'0'+sec:sec}`;if(countdownTime>0){countdownTime--;setTimeout(updateCountdown,1000);}}
+updateCountdown();
+
+// SPOTS
+let spots=5;
+const spotsEl=document.getElementById('spots'),popupSpotsEl=document.getElementById('popup-spots');
+function decreaseSpots(){if(spots>0){spots--; spotsEl.textContent=spots; popupSpotsEl.textContent=spots;}}
+setInterval(decreaseSpots,15000);
+
+// ADVANCED AI PREVIEW
+function generateDynamicAIContentAdvanced(){
+const userSources=["Pinterest","TikTok","Email","LinkedIn"];
+const aiSamples=[
+`Article: Top AI Productivity Hacks for `,
+`Image Idea: Futuristic `,
+`Marketing Snippet: Unlock Your `
+];
+let src=userSources[Math.floor(Math.random()*userSources.length)];
+const aiSampleEl=document.getElementById('ai-sample');
+let idx=0;
+function typeText(text, i=0){
+if(i<text.length){aiSampleEl.textContent=text.substring(0,i+1)+'|'; setTimeout(()=>{typeText(text,i+1)},50);} else {aiSampleEl.textContent=text;}
+}
+typeText(`${aiSamples[idx]}${src} marketers...`);
+setInterval(()=>{
+idx=(idx+1)%aiSamples.length;
+src=userSources[Math.floor(Math.random()*userSources.length)];
+typeText(`${aiSamples[idx]}${src} marketers...`);
+},5000);
+}
+
+// EXIT POPUP
+const exitPopup=document.getElementById('exit-popup');
+document.addEventListener('mouseout',e=>{if(e.clientY<10 && !localStorage.getItem('exitShown')){exitPopup.classList.add('show'); localStorage.setItem('exitShown','true'); increasePoints(10);}});
+document.getElementById('popup-cta').addEventListener('click',()=>{exitPopup.classList.remove('show');});
+
+// LIVE USERS
+let liveCount=12;
+const liveCountEl=document.getElementById('live-count');
+setInterval(()=>{liveCount+=Math.floor(Math.random()*5);liveCountEl.textContent=liveCount;},7000);
+
+// PROGRESS BAR + GAMIFICATION
+const progressFill=document.getElementById('progress-fill');
+window.addEventListener('scroll',()=>{let scrolled=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;progressFill.style.width=scrolled+'%';increasePoints(1);});
+
+// CTA
+const ctaBtn=document.getElementById('cta-btn');
+setInterval(()=>{ctaBtn.style.background=`hsl(${Math.floor(Math.random()*360)},100%,50%)`;},4000);
+ctaBtn.addEventListener('click',()=>{increasePoints(5); showBadge();});
+
+// PERSONALIZATION
+function personalizeContent(){const sources=["Pinterest","TikTok","Email"];
+let src=sources[Math.floor(Math.random()*sources.length)];
+document.getElementById('headline').textContent=`Boost Your ${src} Growth 3x in 7 Days with Brain Pod AI`;
+document.getElementById('subheadline').textContent=`Instant AI-driven results tailored for ${src} marketers.`;
+document.getElementById('exit-title').textContent=`Wait! Don’t Miss Out on ${src} Special Offer!`;}
+
+// SPLIT TEST
+const splitOptions={headline:["3x Productivity in 7 Days with Brain Pod AI – Unlock Your Quantum Growth","Unlock AI Productivity Superpowers – Brain Pod in 7 Days","Boost Your Work Output 3x with Brain Pod AI"],subheadline:["Experience instant AI-driven results in writing, design & marketing.","Transform your workflow with AI productivity tools instantly.","See measurable results in your daily productivity with Brain Pod."],ctaText:["Get Instant Access","Start My Quantum Growth","Claim Your AI Advantage"]};
+function startSplitTest(){const h=splitOptions.headline[Math.floor(Math.random()*splitOptions.headline.length)];
+const s=splitOptions.subheadline[Math.floor(Math.random()*splitOptions.subheadline.length)];
+const c=splitOptions.ctaText[Math.floor(Math.random()*splitOptions.ctaText.length)];
+document.getElementById('headline').textContent=h;
+document.getElementById('subheadline').textContent=s;
+document.getElementById('cta-btn').textContent=c;
+localStorage.setItem('splitTest',JSON.stringify({headline:h,subheadline:s,cta:c}));}
+
+// TESTIMONIALS
+document.querySelectorAll('.testimonial').forEach(el=>{
+el.addEventListener('mousemove',e=>{
+let rect=el.getBoundingClientRect();
+let x=(e.clientX-rect.left)/rect.width-0.5;
+let y=(e.clientY-rect.top)/rect.height-0.5;
+el.style.transform=`translate(${x*20}px,${y*20}px) rotateY(${x*15}deg) rotateX(${y*15}deg)`;
+increasePoints(1);
+});
+el.addEventListener('mouseleave',()=>{el.style.transform='translate(0,0) rotateX(0deg) rotateY(0deg)';});
+});
+
+// POINTS & BADGE
+function increasePoints(n){points+=n;if(points>=20){showBadge();points=0;}}
+function showBadge(){badge.classList.add('show');setTimeout(()=>{badge.classList.remove('show');},2000);}
+});
+</script>
+</body>
+  </html>
